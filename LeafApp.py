@@ -26,34 +26,26 @@ def predict_plant(path):
     img_array = tf.keras.utils.img_to_array(img)
     img_array = tf.expand_dims(img_array, 0)
 
-    # find the top three likeliest plants based on probabilities
+    # find the confidence probability for each plant
     predictions = model.predict(img_array)
     score = tf.nn.softmax(predictions[0])
-    top_three = np.array(score).argsort()[-3:][::-1]
-    numpy_array = score.numpy()
-
-    # convert the folder names into English words then return the three likeliest probabilities
-    output = []
-    for i in top_three:
-        words = class_names[i].split("_")
-        name = " ".join([word.capitalize() for word in words])
-        output.append(
-            "This image likely belongs to {} with {:.2f}% confidence."
-            .format(name, 100 * numpy_array[i])
-        )
-    return "\n".join(output)
-
+    confidences = {class_names[i]: float(score[i]) for i in range(len(class_names))}
+    return confidences
 
 # add a title and description to the model
 title = "Leaftracker Interactive Model"
-description = "Image Classification Model For Identifying Toxic Plants from their Non-Toxic Look-Alikes"
+description = """Leaftracker is an image classification model that differentiates toxic plants from their
+                 non-toxic look-alikes. Built on TensorFlow, this interactive model has been ported to
+                 Hugging Face as a web application. For further documentation, check out the Github
+                 repository at https://github.com/lukelike1001/LeafTracker, and the project's info
+                 page at https://lukelike1001.github.io/leaf.html."""
 
 # launch the app
 app = gr.Interface(
     fn=predict_plant,
     inputs=gr.Image(type="filepath"),
-    outputs="text",
-    flagging_options=["blurry", "incorrect", "other"],
+    outputs=gr.Label(num_top_classes=3),
+    flagging_options=["incorrect", "other"],
     title=title,
     description=description,
     examples=[
