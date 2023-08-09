@@ -1,5 +1,4 @@
 # import library dependencies, tested on python 3.11.2
-import io
 import gradio as gr
 import numpy as np
 import os
@@ -44,11 +43,19 @@ def predict_plant(path):
         )
     return "\n".join(output)
 
+
+# add a title and description to the model
+title = "Leaftracker Interactive Model"
+description = "Image Classification Model For Identifying Toxic Plants from their Non-Toxic Look-Alikes"
+
+# launch the app
 app = gr.Interface(
     fn=predict_plant,
     inputs=gr.Image(type="filepath"),
     outputs="text",
     flagging_options=["blurry", "incorrect", "other"],
+    title=title,
+    description=description,
     examples=[
         os.path.join(os.path.dirname(__file__), "tpc-imgs/bear_oak/000.jpg"),
         os.path.join(os.path.dirname(__file__), "tpc-imgs/boxelder/000.jpg"),
