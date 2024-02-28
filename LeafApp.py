@@ -55,4 +55,4 @@ app = gr.Interface(
         os.path.join(os.path.dirname(__file__), "tpc-imgs/western_poison_oak/000.jpg"),
     ],
 )
-app.launch()
+app.launch(share=True)
