@@ -7,7 +7,7 @@ from tensorflow import keras
 
 # load the pre-trained model from the appropriate file path
 def predict_plant(path):
-    model = tf.keras.models.load_model('saved_model/my_model')
+    model = tf.keras.models.load_model('saved_model/')
 
     # redefine values from the model
     img_height = img_width = 180
