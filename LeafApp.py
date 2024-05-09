@@ -28,7 +28,7 @@ def predict_plant(path):
 
     # find the confidence probability for each plant
     predictions = model.predict(img_array)
-    score = tf.nn.softmax(predictions[0])
+    score = tf.nn.softmax(predictions['outputs'][0])
     confidences = {class_names[i]: float(score[i]) for i in range(len(class_names))}
     return confidences
 
